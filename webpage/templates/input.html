@@ -6,7 +6,8 @@
 </head>
 <body>
     <h1>Get started by filling in the following fields:</h1>
-    <form method="POST">
+    <form method='POST'>
+        {{form.csrf_token}}
         {{form.ticker.label()}}
         {{form.ticker()}}
         {{form.start_price.label()}}

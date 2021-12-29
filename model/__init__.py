@@ -15,13 +15,16 @@ from tensorflow.keras.layers import LSTM, Dropout, Dense # LSTM - long short ter
 
 # Load Data
 def predict(ticker, start_price, num_shares, future_days):
-    company = yf.Ticker(ticker)
-    start = dt.datetime(2012, 1, 1)
-    end = dt.datetime(2020, 1, 1)
-    data = company.history(start=start, end=end)
-    scaler = MinMaxScaler(feature_range=(0, 1))
-    scaled_data = scaler.fit_transform(
-    data["Close"].values.reshape(-1, 1))  # only predicting closing prices, reshape reshapes the array
+    try:
+        company = yf.Ticker(ticker)
+        start = dt.datetime(2012, 1, 1)
+        end = dt.datetime(2020, 1, 1)
+        data = company.history(start=start, end=end)
+        scaler = MinMaxScaler(feature_range=(0, 1))
+        scaled_data = scaler.fit_transform(
+        data["Close"].values.reshape(-1, 1))  # only predicting closing prices, reshape reshapes the array
+    except:
+        return -1
 
     prediction_days = 100
 
@@ -123,11 +126,17 @@ def predict(ticker, start_price, num_shares, future_days):
     plt.legend()
     plt.show()
 
-    print(f"Predicted Price(per share): ${prediction_amount:.2f}")
-    print(f"Net (per share): ${prediction_amount-start_price:.2f}")
-    print(f"Predicted Total Value: ${prediction_amount * num_shares:.2f}")
-    print(f"Net Total: ${(prediction_amount-start_price) * num_shares:.2f}")
-    return prediction_amount
+    per_share = prediction_amount
+    net_per_share = prediction_amount - start_price
+    total = prediction_amount * num_shares
+    net_total = (prediction_amount - start_price) *num_shares
+    print(f"Predicted Price(per share): ${per_share:.2f}")
+    print(f"Net (per share): ${net_per_share:.2f}")
+    print(f"Predicted Total Value: ${total:.2f}")
+    print(f"Net Total: ${net_total:.2f}")
+
+    return [per_share, net_per_share, total, net_total]
+
 
 
 '''
