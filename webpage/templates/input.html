@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Get Started</title>
+</head>
+<body>
+    <h1>Get started by filling in the following fields:</h1>
+    <form method="POST">
+        {{form.ticker.label()}}
+        {{form.ticker()}}
+        {{form.start_price.label()}}
+        {{form.start_price}}
+        {{form.num_shares.label()}}
+        {{form.num_shares()}}
+        {{form.future_days.label()}}
+        {{form.future_days()}}
+        {{form.submit()}}
+    </form>
+</body>
+</html>
