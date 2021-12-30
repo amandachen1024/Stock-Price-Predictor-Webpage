@@ -59,7 +59,7 @@ def predict(ticker, start_price, num_shares, future_days):
     model.add(Dense(units=1)) # prediction of next closing value
 
     model.compile(optimizer="adam", loss="mean_squared_error", metrics=['accuracy'])
-    model.fit(x_train, y_train, epochs=1, batch_size=32)
+    model.fit(x_train, y_train, epochs=25, batch_size=32)
 
     # epochs: model sees same data 24 times, batch_size: model sees 32 units at once
     # can also save and load model
@@ -90,14 +90,15 @@ def predict(ticker, start_price, num_shares, future_days):
 
     x_test = np.array(x_test)
     x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], 1))
-    #print(x_test.shape)
+    # print(x_test.shape)
     predicted_prices = model.predict(x_test)
+    predicted_prices = scaler.inverse_transform(predicted_prices)
 
     # predicting based on code found at https://towardsdatascience.com/time-series-forecasting-with-recurrent-neural-networks-74674e289816
     total_dataset = total_dataset.values.reshape((-1))
-    prediction_list = total_dataset[-prediction_days:]
+    prediction_list = model_inputs[-prediction_days:]
     prediction_list = np.reshape(prediction_list, (-1, 1))
-    prediction_list = scaler.transform(prediction_list)
+    # prediction_list = scaler.transform(prediction_list)
     prediction_list = np.reshape(prediction_list, (-1))
 
     for _ in range(future_days):
@@ -106,25 +107,31 @@ def predict(ticker, start_price, num_shares, future_days):
         out = model.predict(x)[0][0]
         prediction_list = np.append(prediction_list, out)
 
+    prediction_list = prediction_list[prediction_days:]
 
-    prediction_list = prediction_list[prediction_days - 1:]
     prediction = np.reshape(prediction_list[-1], (1, -1))
     prediction = scaler.inverse_transform(prediction)
     prediction_amount = prediction[0][0]
 
+    last_date = test_end
+    prediction_dates = pd.date_range(last_date, periods=future_days).tolist()
+    prediction_plot = np.reshape(prediction_list, (-1, 1))
+    prediction_plot = scaler.inverse_transform(prediction_plot)
 
     # Visualize / Plot Test Predictions
     '''test_data["Date"]=pd.to_datetime(test_data.Date,format="%Y-%m-%d")
     test_data.index=test_data['Date']'''
-    predicted_prices = scaler.inverse_transform(predicted_prices)
+    plt.clf()
     plt.plot(test_data.index, actual_prices, color="black", label=f"Actual {ticker} price")
     plt.plot(test_data.index, predicted_prices, color="green", label=f"Predicted {ticker} price")
+    plt.plot(prediction_dates, prediction_plot, color="blue", label=f"Future predicted {ticker} price")
     plt.xticks(rotation=45)
     plt.title(f"{ticker} Share Price")
-    plt.xlabel("Time")
+    plt.xlabel("Date")
     plt.ylabel(f"{ticker} Share Price")
     plt.legend()
-    plt.show()
+    plt.tight_layout()
+    plt.savefig('webpage/static/plot.png')
 
     per_share = prediction_amount
     net_per_share = prediction_amount - start_price

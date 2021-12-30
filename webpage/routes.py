@@ -14,7 +14,7 @@ def home_page():
         x = predict(ticker=form.ticker.data, start_price=form.start_price.data, num_shares=form.num_shares.data,
                     future_days=form.future_days.data)
         if x != -1:
-            return render_template('prediction.html', per_share=x)
+            return render_template('prediction.html', predictions=x)
         else:
             flash("Invalid Ticker Symbol")
             return render_template('input.html', form=form)

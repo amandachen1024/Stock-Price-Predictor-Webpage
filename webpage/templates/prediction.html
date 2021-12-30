@@ -5,6 +5,47 @@
     <title>Prediction</title>
 </head>
 <body>
-    {{per_share}}
+    <div class="header-container">
+        <h1>Predictions:</h1>
+    </div>
+
+    <div class="predictions-container">
+        <p>{{"Predicted price (per share) $%.2f"|format(predictions[0])}}</p>
+        <p>{{"Net (per share) $%.2f"|format(predictions[1])}}</p>
+        <p>{{"Predicted Total: $%.2f"|format(predictions[2])}}</p>
+        <p>{{"Net Total: $%.2f"|format(predictions[3])}}</p>
+    </div>
+    <div class="plot-container">
+        <img src='/static/plot.png' class="plot">
+    </div>
+
 </body>
+<style>
+    body{
+        font-family: "Lucida Sans";
+        background-color: dimgrey;
+        color: aliceblue;
+    }
+    .header-container{
+        margin: 5vh auto;
+        text-align: center;
+    }
+    h1{
+        font-size: 48px;
+    }
+    .predictions-container{
+        margin: 2vh auto;
+        width: 80vw;
+        font-size: 36px;
+    }
+    .plot-container{
+        margin: auto;
+        width: 100%;
+    }
+    .plot{
+        display: block;
+        margin: auto;
+        width: 30vw;
+    }
+</style>
 </html>

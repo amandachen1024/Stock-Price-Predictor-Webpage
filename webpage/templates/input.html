@@ -2,21 +2,56 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <title>Get Started</title>
 </head>
 <body>
-    <h1>Get started by filling in the following fields:</h1>
-    <form method='POST'>
+    <div class="header-container">
+        <h1>Get started by filling in the following fields:</h1>
+    </div>
+    <div class="form-container">
+        <form method='POST'>
         {{form.csrf_token}}
-        {{form.ticker.label()}}
-        {{form.ticker()}}
-        {{form.start_price.label()}}
-        {{form.start_price}}
-        {{form.num_shares.label()}}
-        {{form.num_shares()}}
-        {{form.future_days.label()}}
-        {{form.future_days()}}
-        {{form.submit()}}
-    </form>
+        {{form.ticker.label(class_="form-label")}}
+        {{form.ticker(class="form-control")}}
+        {{form.start_price.label(class_="form-label")}}
+        {{form.start_price(class="form-control")}}
+        {{form.num_shares.label(class_="form-label")}}
+        {{form.num_shares(class="form-control")}}
+        {{form.future_days.label(class_="form-label")}}
+        {{form.future_days(class="form-control")}}
+        {{form.submit(class="submit")}}
+        </form>
+    </div>
+
 </body>
+<style>
+     body{
+        font-family: "Lucida Sans";
+        background-color: dimgrey;
+        color: aliceblue;
+    }
+    .header-container{
+        margin: 5vh auto;
+        text-align: center;
+    }
+    h1{
+        font-size: 48px;
+    }
+    .form-container{
+        margin: 5vh auto;
+        width: 50vw;
+        font-size: 36px;
+        padding: 25px;
+    }
+    .form-label{
+        margin-top: 35px;
+    }
+    .submit{
+        margin-top: 50px;
+        border-radius: 10px;
+        border-bottom-style: none;
+        color: dimgrey;
+    }
+</style>
 </html>
